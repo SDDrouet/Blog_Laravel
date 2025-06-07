@@ -1,0 +1,130 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ArticleRequest;
+use App\Models\Article;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
+class ArticleController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        // Traer la información del usuario user
+        $user = Auth::user();
+
+        $articles = Article::where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->simplePaginate(10);
+
+        return inertia('Articles/ArticleIndex', compact('articles'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $categories = Category::select('id', 'name')
+            ->where('status', 1)
+            ->get();
+
+        return inertia('Articles/ArticleCreate', compact('categories'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(ArticleRequest $request)
+    {
+        $request->merge([
+            'user_id' => Auth::user()->id,
+        ]);
+
+        $article = $request->all();
+
+        if($request->hasFile('image')) {
+            $request['image'] = $request->file('image')->store('articles', 'public');
+        }
+
+        
+        Article::create($article);
+
+        return redirect()->action([ArticleController::class, 'index'])
+        ->with('success', 'Artículo creado correctamente.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Article $article)
+    {
+        $comments = $article->comments()            
+            ->orderBy('id', 'desc')
+            ->simplePaginate(5);
+
+        return inertia('Articles/ArticleShow',
+         compact('article', 'comments'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Article $article)
+    {
+        $categories = Category::select('id', 'name')
+            ->where('status', 1)
+            ->get();
+
+        return inertia('Articles/ArticleEdit', compact('categories', 'article'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ArticleRequest $request, Article $article)
+    {
+        if($request->hasFile('image')) {
+            // Eliminar la imagen anterior si existe
+            File::delete(public_path('storage/' . $article->image));
+            // Almacenar la nueva imagen
+            $request['image'] = $request->file('image')->store('articles');
+        }
+        
+        $article->update([
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'introduction' => $request->introduction,
+            'body' => $request->body,
+            'user_id' => Auth::user()->id,
+            'status' => $request->status,            
+            'category_id' => $request->category_id,
+        ]);  
+        
+        return redirect()->action([ArticleController::class, 'index'])
+        ->with('success', 'Artículo actualizado correctamente.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Article $article)
+    {
+        //Eliminar la imagen del artículo
+        if($article->image) {
+            File::delete(public_path('storage/' . $article->image));
+        }
+
+        // Eliminar el artículo
+        $article->delete();
+        
+        return redirect()->action([ArticleController::class, 'index'])
+            ->with('success', 'Artículo eliminado correctamente.');            
+    }
+}
