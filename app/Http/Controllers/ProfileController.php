@@ -42,17 +42,12 @@ class ProfileController extends Controller
             $photo = $user->profile->photo;
         }
 
-        $profile->photo = $photo;
+        $request->user()->profile->photo = $photo;
+        $request->user()->profile->email = $request->email;
+        $request->user()->profile->save();
 
-        $request->user()->fill($request->validated());
-        
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
+        return Redirect::route('profile.edit', $request->user()->profile->id)
+            ->with('success', 'Perfil actualizado correctamente.');
     }
 
     /**
