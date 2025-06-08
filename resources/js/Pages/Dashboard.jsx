@@ -24,19 +24,18 @@ export default function Dashboard({ articles, navbar, categories}) {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Dashboard
+                    Inicio
                 </h2>
-                
             }
         >
-            <Head title="Dashboard" />
+            <Head title="Inicio" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
 
-                            <h3 className="font-bold text-3xl">{articles == null ? 'Categories' : 'Articles:'}</h3>
+                            <h3 className="font-bold text-3xl">{articles == null ? 'Categorías' : 'Artículos:'}</h3>
 
                             {articles == null ? (
                                 <ul className="list-disc pl-5 mt-2">

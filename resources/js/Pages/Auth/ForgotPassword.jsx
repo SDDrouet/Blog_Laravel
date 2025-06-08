@@ -16,13 +16,13 @@ export default function ForgotPassword({ status }) {
     };
 
     return (
-        <GuestLayout>
-            <Head title="Forgot Password" />
+        <GuestLayout title="Contraseña Olvidada">
+            <Head title="Contraseña Olvidada" />
 
             <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Forgot your password? No problem. Just let us know your email
-                address and we will email you a password reset link that will
-                allow you to choose a new one.
+                ¿Olvidaste tu contraseña? No hay problema. Solo indícanos tu correo electrónico y te enviaremos un enlace para restablecer la contraseña que te permitirá elegir una nueva.
+
+
             </div>
 
             {status && (
@@ -46,7 +46,7 @@ export default function ForgotPassword({ status }) {
 
                 <div className="mt-4 flex items-center justify-end">
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link
+                        Restablecer contraseña
                     </PrimaryButton>
                 </div>
             </form>
