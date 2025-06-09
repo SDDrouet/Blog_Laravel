@@ -23,8 +23,8 @@ class CategoryFactory extends Factory
             'name' => $name,
             'slug' => Str::slug($name),
             'image' => 'https://placehold.co/640x480?text=' . urlencode($this->faker->word),
-            'is_featured' => $this->faker->boolean(),
-            'status' => $this->faker->boolean(),
+            'is_featured' => $this->faker->boolean(80),
+            'status' => $this->faker->boolean(80),
         ];
     }
 }

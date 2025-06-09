@@ -65,9 +65,19 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        $comments = $article->comments()            
+        $article->load([
+            'user:id,full_name',
+            'user.profile:id,user_id,photo'
+        ]);
+
+        $comments = $article->comments()
+            ->with([
+                'user:id,full_name',
+                'user.profile:id,user_id,photo'
+            ])
             ->orderBy('id', 'desc')
             ->simplePaginate(5);
+
 
         return inertia('Articles/ArticleShow',
          compact('article', 'comments'));

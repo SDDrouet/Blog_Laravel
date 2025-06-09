@@ -22,7 +22,7 @@ class DashboardController extends Controller
             ['is_featured', 1],
         ])->paginate(3);
 
-        return inertia('Dashboard', compact('articles', 'navbar'));
+        return inertia('Home/Dashboard', compact('articles', 'navbar'));
     }
 
     // todas las categorias
@@ -36,6 +36,6 @@ class DashboardController extends Controller
             ['is_featured', 1],
         ])->paginate(3);
 
-        return inertia('Dashboard', compact('categories', 'navbar'));
+        return inertia('Home/Dashboard', compact('categories', 'navbar'));
     }
 }

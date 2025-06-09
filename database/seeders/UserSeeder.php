@@ -17,17 +17,30 @@ class UserSeeder extends Seeder
         User::create([
             'full_name' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => Hash::make('12345678'),
+            'email_verified_at' => now(),
+            'password' => Hash::make('1234'),
         ]);
 
         User::create([
-            'full_name' => 'Stephen Drouet',
-            'email' => 'stephen.drouet@example.com',
-            'password' => Hash::make('12345678'),
+            'full_name' => 'Stephen David Drouet Navarrete',
+            'email' => 'david@example.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('1234'),
         ]);
 
         // Create 10 users
+        // Crear 10 usuarios y actualizar su perfil con o sin foto
+        User::factory(10)->create()->each(function ($user) {
+            $hasPhoto = fake()->boolean(80); // 80% probabilidad de tener foto
 
-        User::factory(10)->create();
+            $user->profile->update([
+                'photo' => $hasPhoto
+                    ? 'https://randomuser.me/api/portraits/' .
+                        (fake()->boolean() ? 'men/' : 'women/') .
+                        fake()->numberBetween(0, 99) . '.jpg'
+                    : null,
+            ]);
+        });
+
     }
 }

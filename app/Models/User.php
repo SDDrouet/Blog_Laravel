@@ -34,6 +34,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    //Crear perfil al crear un usuario
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->profile()->create();
+        });
+    }
+
     /**
      * Get the attributes that should be cast.
      *
