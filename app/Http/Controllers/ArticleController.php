@@ -8,9 +8,11 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArticleController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -65,6 +67,8 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        $this->authorize('published', $article);
+
         $article->load([
             'user:id,full_name',
             'user.profile:id,user_id,photo'
