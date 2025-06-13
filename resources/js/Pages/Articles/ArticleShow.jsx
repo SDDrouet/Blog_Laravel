@@ -1,13 +1,65 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react'
 import Comment from './Partials/Comment';
+import { useForm, usePage } from '@inertiajs/react';
+import StarRating from './Partials/StarRating';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-export default function ArticleIndex({article, comments}) {
+export default function ArticleIndex({article, comments: initialComments}) {
+  const user = usePage().props.auth.user;
+  const [comments, setComments] = useState(initialComments);
+
   useEffect(() => {
     console.log('Article:', article);
     console.log('Comments:', comments);
   }, [article, comments]);
+
+  const { data, setData, processing, errors, reset, setError, clearErrors } = useForm({
+    value: '',
+    description: '',
+    article_id: article.id,
+  });
+
+  const submit = async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    try {
+      const response = await axios.post(route('comments.store'), data);
+      
+      if (response.data.success) {
+        // Agregar el nuevo comentario a la lista
+        setComments(prevComments => ({
+          ...prevComments,
+          data: [response.data.comment, ...prevComments.data]
+        }));
+
+        toast.success(response.data.message);
+
+        // Limpiar el formulario
+        reset();
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        // Errores de validación
+        const errorData = error.response.data;
+        if (errorData.errors) {
+          Object.keys(errorData.errors).forEach(key => {
+            setError(key, errorData.errors[key][0]);
+          });
+        } else {
+          toast.error('Ya has comentado este artículo.');
+        }
+      } else {
+        toast.error('Ocurrió un error al enviar el comentario.');
+      }
+    }
+
+    // Ocultar notificación después de 4 segundos
+    setTimeout(() => setNotification(null), 4000);
+  };
 
   return (
     <AuthenticatedLayout
@@ -86,6 +138,68 @@ export default function ArticleIndex({article, comments}) {
         </div>
       </div>
 
+      <div className="pb-12">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="bg-gray-200 dark:bg-gray-800 bg-opacity-30 dark:bg-opacity-30 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+            {/*Si el usuario esta autenticado puede comentar*/ }
+
+            {user ? (
+              <div className="p-8 lg:p-12">
+                {/* Título de la sección de comentarios */}
+                <h2 className="text-2xl font-light text-gray-900 dark:text-gray-100 mb-6">
+                  Deja un comentario
+                </h2>
+                  <form onSubmit={submit} className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                        Valoración (1 a 5)
+                      </label>
+                      
+                      <StarRating 
+                        value={parseInt(data.value) || 0}
+                        onChange={(rating) => setData('value', rating.toString())}
+                        error={errors.value}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Comentario
+                      </label>
+                      <textarea
+                        value={data.description}
+                        onChange={(e) => setData('description', e.target.value)}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:text-white focus:border-rose-500 focus:ring-rose-500"
+                        rows="4"
+                        required
+                      />
+                      {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+                    </div>
+
+                    <div className='flex justify-end'>
+                        <button
+                        type="submit"
+                        disabled={processing}
+                        className="bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-semibold px-4 py-2 rounded-md"
+                      >
+                        {processing ? 'Enviando...' : 'Publicar comentario'}
+                      </button>
+                    </div>
+                  </form>
+              </div>
+            ) : (
+              <div className="p-8 lg:p-12">
+                <p className="text-base text-gray-500 dark:text-gray-400">
+                  Debes estar autenticado para comentar.
+                </p>
+              </div>
+            )}
+
+            
+          </div>
+        </div>
+      </div>
+
       {/* Sección de Comentarios */}
       <div className="pb-12">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -106,7 +220,6 @@ export default function ArticleIndex({article, comments}) {
               {comments.data.length > 0 ? (
                 <div className="space-y-8">
                   {comments.data.map((comment, index) => (
-                    
                     <Comment
                       key={comment.id}
                       comment={comment}

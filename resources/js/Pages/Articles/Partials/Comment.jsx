@@ -2,7 +2,36 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 export class Comment extends Component {
-  static propTypes = {comment: PropTypes.object.isRequired, index: PropTypes.number.isRequired}
+    static propTypes = {comment: PropTypes.object.isRequired, index: PropTypes.number.isRequired}
+
+    renderStars(value) {
+        const fullStar = '★';
+        const emptyStar = '☆';
+
+        return (
+            <div className="flex gap-0">
+            {[1, 2, 3, 4, 5].map((rating) => (
+                <span
+                key={rating}
+                className={`text-2xl duration-100 transform 
+                    ${rating <= value
+                    ? 'text-rose-500 drop-shadow-sm'
+                    : 'text-gray-300 dark:text-gray-600'
+                    } 
+                    select-none`}
+                style={{
+                    textShadow: rating <= value
+                    ? '0 0 3px rgba(244, 63, 94, 0.3)'
+                    : 'none',
+                }}
+                >
+                {rating <= value ? fullStar : emptyStar}
+                </span>
+            ))}
+            </div>
+        );
+        }
+
 
   render() {
     const { comment, index } = this.props;
@@ -40,6 +69,10 @@ export class Comment extends Component {
                     minute: '2-digit'
                 })}
                 </p>
+                {/* Estrellas */}
+                <div className="flex mt-1">
+                    {this.renderStars(comment.value)}
+                </div>
             </div>
             </div>
 

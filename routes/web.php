@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 // Main routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    
     Route::get('/all', [DashboardController::class, 'all'])->name('dashboard.all');
 
     //Forma simplificada para crear un artículo mas simplificada
@@ -28,18 +28,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // articulos por categoría
     Route::get('/category/{category}', [CategoryController::class, 'detail'])->name('categories.detail');
     
-    // Ver articulos
-    Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+
 
     // Comentarios
     Route::resource('comments', CommentController::class)
         ->only(['index', 'destroy'])
         ->names('comments');
 
-    Route::get('/comment', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/comment', action: [CommentController::class, 'store'])->name('comments.store');
 });
 
-
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');    // Ver articulos
+    Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 // Rutas
 Route::middleware(['auth', 'verified'])->group(function () {

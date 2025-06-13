@@ -4,6 +4,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
@@ -13,6 +14,23 @@ export default function AuthenticatedLayout({ header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+            <div>
+                <Toaster
+                    position="top-right"
+                    reverseOrder={false}
+                    toastOptions={{
+                        duration: 4000,
+                        style: {
+                            background: '#111917',
+                            tranparent: 'true',
+                            opacity: '0.9',
+                            border: '1px solid #555',
+                            borderRadius: '8px',
+                            color: '#fff',
+                        },
+                    }}
+                />
+            </div>
             <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -43,45 +61,78 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <span className="material-symbols-rounded text-gray-500 dark:bg-gray-800 dark:text-gray-400 select-none text-[50px]">
-                                account_circle
-                            </span>
 
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
-                                            >
-                                                {user.name}
+                        {/* Si existe user mostrar info, caso contrario mostrar botones de inicio de sesión o registrarse*/}
 
-                                                <span className="material-symbols-rounded">
-                                                    keyboard_arrow_down
-                                                </span>
-                                            </button>
+                        {user ? (
+                            <div className="hidden sm:ms-6 sm:flex sm:items-center">
+
+                                {/* Icono de usuario y dropdown para perfil */}
+                                {user.profile.photo ? (
+                                    <img
+                                    src={user.profile.photo}
+                                    alt={user.full_name}
+                                    className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700"
+                                    />
+                                ) : (
+                                    <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                        <span className="material-symbols-rounded text-gray-400 text-xl">
+                                            account_circle
                                         </span>
-                                    </Dropdown.Trigger>
+                                    </div>
+                                )}
 
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Perfil
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Cerrar Sesión
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
+                                <div className="relative ms-3">
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <span className="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                                >
+                                                    {user.name}
+
+                                                    <span className="material-symbols-rounded">
+                                                        keyboard_arrow_down
+                                                    </span>
+                                                </button>
+                                            </span>
+                                        </Dropdown.Trigger>
+
+                                        <Dropdown.Content>
+                                            <Dropdown.Link
+                                                href={route('profile.edit')}
+                                            >
+                                                Perfil
+                                            </Dropdown.Link>
+                                            <Dropdown.Link
+                                                href={route('logout')}
+                                                method="post"
+                                                as="button"
+                                            >
+                                                Cerrar Sesión
+                                            </Dropdown.Link>
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                                <Link
+                                    href={route('login')}
+                                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                >
+                                    Iniciar Sesión
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    className="ms-3 inline-flex items-center justify-center rounded-md border border-transparent bg-rose-600 px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out hover:bg-rose-700 focus:outline-none dark:bg-rose-500 dark:hover:bg-rose-600"
+                                >
+                                    Registrarse
+                                </Link>
+                            </div>
+                        )}
+                        
 
                         <div className="-me-2 flex items-center sm:hidden">
                             <button
@@ -150,29 +201,51 @@ export default function AuthenticatedLayout({ header, children }) {
                         </ResponsiveNavLink>
                     </div>
 
-                    <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800 dark:text-gray-200">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
 
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Perfil
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
-                                Cerrar Sesión
-                            </ResponsiveNavLink>
+                    {user ? (
+                        <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
+                            <div className="px-4">
+                                <div className="text-base font-medium text-gray-800 dark:text-gray-200">
+                                    {user.name}
+                                </div>
+                                <div className="text-sm font-medium text-gray-500">
+                                    {user.email}
+                                </div>
+                            </div>
+
+                            <div className="mt-3 space-y-1">
+                                <ResponsiveNavLink href={route('profile.edit')}>
+                                    Perfil
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    method="post"
+                                    href={route('logout')}
+                                    as="button"
+                                >
+                                    Cerrar Sesión
+                                </ResponsiveNavLink>
+                            </div>
                         </div>
-                    </div>
+                    )
+                    : (
+                        <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
+                            <div className="px-4">
+                                <Link
+                                    href={route('login')}
+                                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                >
+                                    Iniciar Sesión
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    className="ms-3 inline-flex items-center justify-center rounded-md border border-transparent bg-rose-600 px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out hover:bg-rose-700 focus:outline-none dark:bg-rose-500 dark:hover:bg-rose-600"
+                                >
+                                    Registrarse
+                                </Link>
+                            </div>
+                        </div>
+                    )}
+                    
                 </div>
             </nav>
 

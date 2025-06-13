@@ -38,32 +38,39 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CommentRequest $request)
-    {
-        //Verificar si en el articulo ya existe un comentario del usuario actual
-        $result = Comment::where('user_id', Auth::user()->id)
+    public function store(CommentRequest $request) {
+        $userId = Auth::id();
+        $article = Article::select('slug', 'status')->find($request->article_id);
+
+        $alreadyCommented = Comment::where('user_id', $userId)
             ->where('article_id', $request->article_id)
             ->exists();
 
-        // Consulta para obtener el slug y estado del artículo
-        $article = Article::select('slug', 'status')
-            ->find($request->article_id);
-
-        if(!$result and $article->status == 1) {
-            Comment::create([
+        if (!$alreadyCommented && $article->status == 1) {
+            $comment = Comment::create([
                 'value' => $request->value,
                 'description' => $request->description,
                 'article_id' => $request->article_id,
-                'user_id' => Auth::user()->id,
+                'user_id' => $userId,
             ]);
-            
-            return redirect()->action([ArticleController::class, 'show'], [$article->slug])
-                ->with('success', 'Comentario creado correctamente');
-        } else {
-            return redirect()->action([ArticleController::class, 'show'], [$article->slug])
-                ->with('success-error', 'Ya has comentado en este artículo o el artículo no está disponible');
+
+            // Cargar las relaciones necesarias para el nuevo comentario
+            $comment->load('user.profile');
+
+            // Retornar respuesta JSON en lugar de redirect
+            return response()->json([
+                'success' => true,
+                'message' => 'Comentario enviado correctamente.',
+                'comment' => $comment
+            ]);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Ya has comentado en este artículo o el artículo no está disponible',
+        ], 422);
     }
+
 
     /**
      * Display the specified resource.
