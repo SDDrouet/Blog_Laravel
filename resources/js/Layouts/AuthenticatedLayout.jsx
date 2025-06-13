@@ -114,6 +114,11 @@ export default function AuthenticatedLayout({ header, children }) {
                                                 Perfil
                                             </Dropdown.Link>
                                             <Dropdown.Link
+                                                href={route('admin.index')}
+                                            >
+                                                Panel de Control
+                                            </Dropdown.Link>
+                                            <Dropdown.Link
                                                 href={route('logout')}
                                                 method="post"
                                                 as="button"
@@ -225,6 +230,9 @@ export default function AuthenticatedLayout({ header, children }) {
                             <div className="mt-3 space-y-1">
                                 <ResponsiveNavLink href={route('profile.edit')}>
                                     Perfil
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('admin.index')}>
+                                    Panel de Control
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     method="post"

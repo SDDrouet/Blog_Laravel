@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
@@ -34,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/frase', function () {
         return Inertia::render('Others/Frase');
     })->name('frase');
+
+    Route::get('/admin', action: [AdminController::class, 'index'])->name('admin.index');
 });
 
 // Authentication routes
