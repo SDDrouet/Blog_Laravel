@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Article;
 use App\Models\Category;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class CategoryController extends Controller
 {
+    use AuthorizesRequests;
+    
     /**
      * Display a listing of the resource.
      */
@@ -94,6 +97,9 @@ class CategoryController extends Controller
     //Filtrar articulos por categoria
     public function detail(Category $category)
     {
+        // Verificar si la categoría está activa
+        $this->authorize('detail', $category);
+
         $articles = Article::where([
                 ['status', 1],
                 ['category_id', $category->id],
@@ -106,6 +112,6 @@ class CategoryController extends Controller
             ['is_featured', 1],
         ])->paginate(3);
 
-        return inertia('Categories/CategoryDetail', compact('articles', 'category', 'navbar'));
+        return inertia('Home/Dashboard', compact('articles', 'category', 'navbar'));
     }
 }
