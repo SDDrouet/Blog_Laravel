@@ -1,6 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import React, { useState } from 'react'
-import { useEffect } from 'react'
 import Comment from './Partials/Comment';
 import { useForm, usePage } from '@inertiajs/react';
 import StarRating from './Partials/StarRating';
@@ -10,11 +9,6 @@ import toast from 'react-hot-toast';
 export default function ArticleIndex({article, comments: initialComments}) {
   const user = usePage().props.auth.user;
   const [comments, setComments] = useState(initialComments);
-
-  useEffect(() => {
-    console.log('Article:', article);
-    console.log('Comments:', comments);
-  }, [article, comments]);
 
   const { data, setData, processing, errors, reset, setError, clearErrors } = useForm({
     value: '',
@@ -56,9 +50,6 @@ export default function ArticleIndex({article, comments: initialComments}) {
         toast.error('Ocurrió un error al enviar el comentario.');
       }
     }
-
-    // Ocultar notificación después de 4 segundos
-    setTimeout(() => setNotification(null), 4000);
   };
 
   return (

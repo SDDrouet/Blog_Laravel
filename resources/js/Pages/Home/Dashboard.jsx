@@ -5,14 +5,6 @@ import ArticleCard from './Partials/ArticleCard';
 
 export default function Dashboard({ articles, navbar, categories }) {
 
-    useEffect(() => {
-        console.log('Articles in useEffect:', articles);
-    }, [articles]);
-
-    useEffect(() => {
-        console.log('Navbar in useEffect:', navbar);
-    }, [navbar]);
-
     return (
         <AuthenticatedLayout
             header={

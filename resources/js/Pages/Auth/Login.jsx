@@ -12,6 +12,7 @@ export default function Login({ status, canResetPassword }) {
         email: '',
         password: '',
         remember: false,
+        redirect_to: localStorage.getItem('redirect_after_login') || '/',
     });
 
     const submit = (e) => {
@@ -33,6 +34,7 @@ export default function Login({ status, canResetPassword }) {
             )}
 
             <form onSubmit={submit}>
+                <input type="hidden" name="redirect_to" value={data.redirect_to} />
                 <div>
                     <InputLabel htmlFor="email" value="Correo Electrónico" />
 

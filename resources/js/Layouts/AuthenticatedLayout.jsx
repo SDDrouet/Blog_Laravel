@@ -12,6 +12,14 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    // limpiar localStorage
+    localStorage.removeItem('redirect_after_login');
+
+    const handleAccionPrivada = () => {
+        localStorage.setItem('redirect_after_login', window.location.pathname);
+    };
+
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <div>
@@ -120,6 +128,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             <div className="hidden sm:ms-6 sm:flex sm:items-center">
                                 <Link
                                     href={route('login')}
+                                    onClick={handleAccionPrivada}
                                     className="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
                                 >
                                     Iniciar Sesión
