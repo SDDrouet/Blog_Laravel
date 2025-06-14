@@ -30,11 +30,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->only(['index', 'destroy'])
         ->names('admin.comments');
 
+    // Usuarios
+    Route::resource('admin/users', \App\Http\Controllers\UserController::class)
+        ->except(['show', 'create', 'store']) // Exclude show, create, and store methods
+        ->names('admin.users');
+
     Route::post('/comment', action: [CommentController::class, 'store'])->name('comments.store');
 
     Route::get('/frase', function () {
         return Inertia::render('Others/Frase');
     })->name('frase');
+
 
     Route::get('/admin', action: [AdminController::class, 'index'])->name('admin.index');
 });
