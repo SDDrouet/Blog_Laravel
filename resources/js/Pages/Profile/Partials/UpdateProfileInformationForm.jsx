@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
+import toast from 'react-hot-toast';
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,
@@ -16,12 +17,21 @@ export default function UpdateProfileInformation({
         useForm({
             full_name: user.full_name,
             email: user.email,
+            photo: user.profile.photo,
         });
 
     const submit = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'));
+        patch(route('profile.update'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Información del perfil actualizada correctamente.');
+            },
+            onError: (error) => {
+                toast.error('Error al actualizar la información del perfil.');
+            },
+        });
     };
 
     return (
@@ -68,6 +78,45 @@ export default function UpdateProfileInformation({
 
                     <InputError className="mt-2" message={errors.email} />
                 </div>
+
+                <div>
+                    <InputLabel htmlFor="photo" value="Foto de Perfil" />
+                    <TextInput
+                        id="photo"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.photo || ''}
+                        onChange={(e) => setData('photo', e.target.value)}
+                        autoComplete="photo"
+                    />
+                    <InputError className="mt-2" message={errors.photo} />
+                </div>
+
+                {/* Foto de Perfil */}
+                <div>
+                    {user.profile.photo ? (
+                        <div className="mt-2">
+                            <img
+                                src={user.profile.photo}
+                                alt="Foto de Perfil"
+                                className="h-20 w-20 rounded-full object-cover"
+                            />
+                        </div>
+                    ) : (
+                        <div className="mt-2">
+                            <div className="h-20 w-20 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                <span className="material-symbols-rounded text-gray-400 text-7xl">
+                                    account_circle
+                                </span>
+                            </div>
+                            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                No se ha cargado ninguna foto de perfil.
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                    
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>

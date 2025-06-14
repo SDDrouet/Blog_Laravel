@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,20 +32,19 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request, Profile $profile): RedirectResponse
     {
-        $user = Auth::user();
+        $userAuth = Auth::user();
 
-        if($request->hasFile('photo')){
-            //Eliminar foto anterior
-            File::delete(public_path('storage/'. $profile->photo));
-            //Asignar nueva foto
-            $photo = $request['photo']->store('profiles');
-        }else{
-            $photo = $user->profile->photo;
-        }
+        // cargar usuario autenticado desde la base de datos con query
+        $user = User::with('profile')->find($userAuth->id);
 
-        $request->user()->profile->photo = $photo;
-        $request->user()->profile->email = $request->email;
-        $request->user()->profile->save();
+        $user->full_name = $request->full_name;
+        $user->email = $request->email;
+        $user->save();
+
+        // cargar perfil del usuario autenticado desde la base de datos con query sin relacionar a usuarios        
+        $profile = Profile::find($userAuth->profile->id);
+        $profile->photo = $request->photo;
+        $profile->save();
 
         return Redirect::route('profile.edit', $request->user()->profile->id)
             ->with('success', 'Perfil actualizado correctamente.');
