@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout'
 import React from 'react'
-import { Link } from '@inertiajs/react'
+import { Link, router } from '@inertiajs/react'
+import toast from 'react-hot-toast';
 
 export default function ArticleIndex({ articles }) {
     console.log(articles);
@@ -111,7 +112,7 @@ export default function ArticleIndex({ articles }) {
                                             <div className="flex items-center justify-center space-x-2">
                                                 {/* Ver */}
                                                 <Link
-                                                    href={`/admin/articles/${article.id}`}
+                                                    href={route('articles.show', article)}
                                                     className="inline-flex items-center p-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900/50 rounded-md transition-colors duration-150"
                                                     title="Ver artículo"
                                                 >
@@ -120,7 +121,7 @@ export default function ArticleIndex({ articles }) {
                                                 
                                                 {/* Editar */}
                                                 <Link
-                                                    href={`/admin/articles/${article.id}/edit`}
+                                                    href={route('admin.articles.edit', article)}
                                                     className="inline-flex items-center p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-md transition-colors duration-150"
                                                     title="Editar artículo"
                                                 >
@@ -130,10 +131,16 @@ export default function ArticleIndex({ articles }) {
                                                 {/* Eliminar */}
                                                 <button
                                                     onClick={() => {
-                                                        if (confirm('¿Estás seguro de que quieres eliminar este artículo?')) {
-                                                            // Aquí puedes agregar la lógica para eliminar
-                                                            // router.delete(`/admin/articles/${article.id}`)
-                                                        }
+                                                        router.delete(route('admin.articles.destroy', article), {
+                                                            onBefore: () => confirm('¿Estás seguro de eliminar este artículo?'),
+                                                            onSuccess: () => {                                                                
+                                                                toast.success('Artículo eliminado correctamente');
+                                                            },
+                                                            onError: () => {
+                                                                toast.error('Error al eliminar el artículo');                                                                
+                                                            }
+                                                        });
+
                                                     }}
                                                     className="inline-flex items-center p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-md transition-colors duration-150"
                                                     title="Eliminar artículo"

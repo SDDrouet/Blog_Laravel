@@ -90,11 +90,13 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        $this->authorize('view', $article);
+
         $categories = Category::select('id', 'name')
             ->where('status', 1)
             ->get();
 
-        return inertia('Articles/ArticleEdit', compact('categories', 'article'));
+        return inertia('Admin/Articles/ArticleCreate', compact('categories', 'article'));
     }
 
     /**
@@ -102,18 +104,14 @@ class ArticleController extends Controller
      */
     public function update(ArticleRequest $request, Article $article)
     {
-        if($request->hasFile('image')) {
-            // Eliminar la imagen anterior si existe
-            File::delete(public_path('storage/' . $article->image));
-            // Almacenar la nueva imagen
-            $request['image'] = $request->file('image')->store('articles');
-        }
-        
+        $this->authorize('update', $article);
+
         $article->update([
             'title' => $request->title,
             'slug' => $request->slug,
             'introduction' => $request->introduction,
             'body' => $request->body,
+            'image' => $request->image ?? $article->image,
             'user_id' => Auth::user()->id,
             'status' => $request->status,            
             'category_id' => $request->category_id,
@@ -128,10 +126,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //Eliminar la imagen del artículo
-        if($article->image) {
-            File::delete(public_path('storage/' . $article->image));
-        }
+        $this->authorize('delete', $article);
 
         // Eliminar el artículo
         $article->delete();

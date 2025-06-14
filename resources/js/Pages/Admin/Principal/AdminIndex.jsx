@@ -20,17 +20,17 @@ export default function AdminIndex() {
         </p>
 
         {/* Ícono grande centrado */}
-        <div className="justify-center m-auto grid grid-cols-2 w-60 gap-0">
-          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500">
+        <div className="justify-center m-auto mt-4 grid grid-cols-2 w-60 gap-0">
+          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500 select-none">
             dashboard
           </span>
-          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500">
+          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500 select-none">
             dashboard
           </span>
-          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500">
+          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500 select-none">
             dashboard
           </span>
-          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500">
+          <span className="material-symbols-rounded text-9xl text-rose-700 dark:text-rose-500 select-none">
             dashboard
           </span>
         </div>

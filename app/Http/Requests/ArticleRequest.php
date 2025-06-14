@@ -21,11 +21,13 @@ class ArticleRequest extends FormRequest
      */
     public function rules(): array
     {
-        $slug = request()->isMethod('put') ? 'required|unique:articles,slug,' . $this->id : 'required|unique:articles';
+        $slugRule = request()->isMethod('put')
+            ? 'required|unique:articles,slug,' . $this->route('article')->id
+            : 'required|unique:articles,slug';
 
         return [
             'title' => 'required|min:5|max:255',
-            'slug' => $slug,
+            'slug' => $slugRule,
             'introduction' => 'required|min:10|max:255',
             'body' => 'required',
             'image' => 'string|nullable|max:255',
@@ -33,4 +35,5 @@ class ArticleRequest extends FormRequest
             'category_id' => 'required|integer',
         ];
     }
+
 }

@@ -8,15 +8,15 @@ import { useForm, router } from '@inertiajs/react';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-export default function ArticleCreate({ categories }) {
+export default function ArticleCreate({ categories, article }) {
     const { data, setData, processing, errors, reset, setError, clearErrors } = useForm({
-        title: '',
-        slug: '',
-        introduction: '',
-        image: '',
-        body: '',
-        status: 1,
-        category_id: '',
+        title: article?.title || '',
+        slug: article?.slug || '',
+        introduction: article?.introduction || '',
+        image: article?.image || '',
+        body: article?.body || '',
+        status: article?.status || 1,
+        category_id: article?.category_id || '',
     });
 
     // Autogenerar el slug cuando cambia el título
@@ -33,13 +33,24 @@ export default function ArticleCreate({ categories }) {
         e.preventDefault();
         clearErrors();
 
-        router.post(route('admin.articles.store'), data, {
-            onSuccess: () => toast.success('Artículo creado exitosamente'),
-            onError: (errors) => {
-                toast.error('Hubo un problema al crear el artículo');
-                setError(errors);
-            },
-        });
+        if (article) {
+            // Si estamos editando un artículo existente, usamos el método PUT
+            router.put(route('admin.articles.update', article), data, {
+                onSuccess: () => toast.success('Artículo actualizado exitosamente'),
+                onError: (errors) => {
+                    toast.error('Hubo un problema al actualizar el artículo');
+                    setError(errors);
+                },
+            });
+        } else {
+            router.post(route('admin.articles.store'), data, {
+                onSuccess: () => toast.success('Artículo creado exitosamente'),
+                onError: (errors) => {
+                    toast.error('Hubo un problema al crear el artículo');
+                    setError(errors);
+                },
+            });
+        }
     };
 
     return (
@@ -90,6 +101,11 @@ export default function ArticleCreate({ categories }) {
                             required
                         />
                         {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image}</p>}
+                        {article?.image && (
+                            <div className="mt-2 w-full justify-center flex">
+                                <img src={article.image} alt="Imagen del artículo" className="w-1/3 h-auto rounded-md" />
+                            </div>
+                        )}
                     </div>
 
                     {/* Introducción */}
@@ -114,7 +130,6 @@ export default function ArticleCreate({ categories }) {
                             value={data.body}
                             onChange={(val) => {
                                 setData('body', val);
-                                console.log('Cuerpo del artículo actualizado:', val);
                             }}
                         />
                         {errors.body && <p className="text-red-500 text-xs mt-1">{errors.body}</p>}
@@ -163,7 +178,7 @@ export default function ArticleCreate({ categories }) {
                             disabled={processing}
                             className="inline-flex items-center px-4 py-2 bg-rose-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-500 active:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
                         >
-                            Crear Artículo
+                            {article ? "Editar Artículo" : "Crear Artículo"}
                         </button>
                     </div>
                 </form>
