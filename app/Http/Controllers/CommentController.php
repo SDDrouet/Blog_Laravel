@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommentRequest;
 use App\Models\Article;
 use App\Models\Comment;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -19,10 +22,10 @@ class CommentController extends Controller
         $comments = DB::table('comments')
             ->join('articles', 'comments.article_id', '=', 'articles.id')
             ->join('users', 'comments.user_id', '=', 'users.id')
-            ->select('comments.value', 'comments.description', 'articles.title', 'users.full_name')
+            ->select('comments.id','comments.value', 'comments.description', 'articles.id as article_id', 'articles.user_id as article_user_id', 'articles.title', 'users.full_name')
             ->where('articles.user_id', Auth::user()->id)
             ->orderBy('comments.id', 'desc')
-            ->get();
+            ->get();        
 
         return inertia('Admin/Comments/CommentIndex', compact('comments'));
     }
@@ -101,6 +104,8 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        $this->authorize('deleteComment', $comment);
+
         $comment->delete();
 
         return redirect()->action([CommentController::class, 'index'], compact('comment'))
