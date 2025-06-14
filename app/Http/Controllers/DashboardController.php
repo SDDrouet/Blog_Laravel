@@ -14,13 +14,14 @@ class DashboardController extends Controller
         // Obtener los articulos publicos
         $articles = Article::where('status', 1)
             ->orderBy('id', 'desc')
-            ->simplePaginate(10);
+            ->paginate(12);
 
         // Obtener las categorias destacadas para el navbar
         $navbar = Category::where([
             ['status', 1],
             ['is_featured', 1],
-        ])->paginate(3);
+        ])->get()->take(3);
+
 
         return inertia('Home/Dashboard', compact('articles', 'navbar'));
     }
@@ -29,12 +30,12 @@ class DashboardController extends Controller
     public function all() {
         #categories
         $categories = Category::where('status', 1)            
-            ->simplePaginate(20);
+            ->simplePaginate(12);
 
         $navbar = Category::where([
             ['status', 1],
             ['is_featured', 1],
-        ])->paginate(3);
+        ])->get()->take(3);
 
         return inertia('Home/Dashboard', compact('categories', 'navbar'));
     }

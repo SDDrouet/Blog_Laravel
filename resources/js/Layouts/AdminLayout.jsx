@@ -19,9 +19,21 @@ export default function AdminLayout({ header, children }) {
         },
         {
             name: 'Artículos',
-            href: '/aa',
+            href: route('admin.articles.index'),
             icon: 'article',
             current: route().current('admin.articles.*')
+        },
+        {
+            name: 'Categorías',
+            href: route('admin.categories.index'),
+            icon: 'category',
+            current: route().current('admin.categories.*')
+        },
+        {
+            name: 'Comentarios',
+            href: route('admin.comments.index'),
+            icon: 'comment',
+            current: route().current('admin.comments.*')
         },
         /*
         {

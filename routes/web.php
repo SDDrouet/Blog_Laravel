@@ -16,19 +16,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Forma simplificada para crear un artículo mas simplificada
     //Articles
-    Route::resource('articles', ArticleController::class)
+    Route::resource('admin/articles', ArticleController::class)
         ->except('show')
-        ->names('articles');
+        ->names('admin.articles');
 
     //Categorías resource
-    Route::resource('categories', CategoryController::class)
+    Route::resource('admin/categories', CategoryController::class)
         ->except('show') // Exclude show and destroy methods
-        ->names('categories');
+        ->names('admin.categories');
 
     // Comentarios
-    Route::resource('comments', CommentController::class)
+    Route::resource('admin/comments', CommentController::class)
         ->only(['index', 'destroy'])
-        ->names('comments');
+        ->names('admin.comments');
 
     Route::post('/comment', action: [CommentController::class, 'store'])->name('comments.store');
 

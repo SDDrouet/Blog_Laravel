@@ -1,5 +1,6 @@
 import React from 'react'
 import ArticleCard from './ArticleCard'
+import { Link } from '@inertiajs/react'
 
 function Articles({articles}) {
   return (
@@ -9,16 +10,72 @@ function Articles({articles}) {
                 <h2 className="text-2xl font-light text-gray-900 dark:text-gray-100 mb-2">
                     Artículos
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {articles.data.length} {articles.data.length === 1 ? 'artículo disponible' : 'artículos disponibles'}
-                </p>
             </div>
 
             {articles.data.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {articles.data.map(article => (
-                        <ArticleCard key={article.id} article={article} />
-                    ))}
+                <div>
+                    <div className="mt-6 flex items-center justify-between flex-wrap gap-4 mb-8">
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                            Mostrando artículos del {articles.from} a {articles.to} de {articles.total}
+                        </div>
+                        <div className="flex gap-1">
+                            {articles.prev_page_url && (
+                                <Link
+                                    href={articles.prev_page_url}
+                                    className="px-3 py-1 text-sm border rounded-md text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                >
+                                    &laquo; Anterior
+                                </Link>
+                            )}
+
+                            <span className="px-3 py-1 text-sm border rounded-md bg-rose-500 text-white border-rose-500">
+                                Página {articles.current_page}
+                            </span>
+
+                            {articles.next_page_url && (
+                                <Link
+                                    href={articles.next_page_url}
+                                    className="px-3 py-1 text-sm border rounded-md text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                >
+                                    Siguiente &raquo;
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {articles.data.map(article => (
+                            <ArticleCard key={article.id} article={article} />
+                        ))}
+                    </div>
+                    <div className="mt-6 flex items-center justify-between flex-wrap gap-4">
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                            Mostrando artículos del {articles.from} a {articles.to} de {articles.total}
+                        </div>
+                        <div className="flex gap-1">
+                            {articles.prev_page_url && (
+                                <Link
+                                    href={articles.prev_page_url}
+                                    className="px-3 py-1 text-sm border rounded-md text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                >
+                                    &laquo; Anterior
+                                </Link>
+                            )}
+
+                            <span className="px-3 py-1 text-sm border rounded-md bg-rose-500 text-white border-rose-500">
+                                Página {articles.current_page}
+                            </span>
+
+                            {articles.next_page_url && (
+                                <Link
+                                    href={articles.next_page_url}
+                                    className="px-3 py-1 text-sm border rounded-md text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                >
+                                    Siguiente &raquo;
+                                </Link>
+                            )}
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <div className="text-center py-12">

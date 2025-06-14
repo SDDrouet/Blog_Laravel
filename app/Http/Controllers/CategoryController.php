@@ -21,7 +21,7 @@ class CategoryController extends Controller
         $categories = Category::orderBy('id', 'desc')
             ->simplePaginate(8);
 
-        return inertia('Categories/CategoryIndex', compact('categories'));
+        return inertia('Admin/Categories/CategoryIndex', compact('categories'));
     }
 
     /**
@@ -105,12 +105,12 @@ class CategoryController extends Controller
                 ['category_id', $category->id],
             ])
             ->orderBy('id', 'desc')
-            ->simplePaginate(5);
+            ->paginate(5);
 
         $navbar = Category::where([
             ['status', 1],
             ['is_featured', 1],
-        ])->paginate(3);
+        ])->get()->take(3);
 
         return inertia('Home/Dashboard', compact('articles', 'category', 'navbar'));
     }
