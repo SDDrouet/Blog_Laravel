@@ -5,6 +5,7 @@ import { useForm, usePage } from '@inertiajs/react';
 import StarRating from './Partials/StarRating';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import RichTextHTML from '@/Components/RichTextHTML';
 
 export default function ArticleIndex({article, comments: initialComments}) {
   const user = usePage().props.auth.user;
@@ -121,7 +122,7 @@ export default function ArticleIndex({article, comments: initialComments}) {
               {/* Cuerpo del artículo */}
               <div className="prose prose-lg dark:prose-invert max-w-none prose-gray">
                 <div className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-                  {article.body}
+                  <RichTextHTML content={article.body} />
                 </div>
               </div>
             </div>

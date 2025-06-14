@@ -52,7 +52,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    active={route().current('dashboard') || route().current('categories.detail') || route().current('dashboard.all')}
                                 >
                                     <span className="material-symbols-rounded mb-2">
                                         home

@@ -22,10 +22,13 @@ class ArticleController extends Controller
         $user = Auth::user();
 
         $articles = Article::where('user_id', $user->id)
-            ->orderBy('id', 'desc')
-            ->simplePaginate(10);
+            ->with([
+                'categories:id,name',
+            ])
+            ->orderBy('id', 'desc')            
+            ->paginate(10);        
 
-        return inertia('Articles/ArticleIndex', compact('articles'));
+        return inertia('Admin/Articles/ArticleIndex', compact('articles'));
     }
 
     /**
@@ -37,7 +40,7 @@ class ArticleController extends Controller
             ->where('status', 1)
             ->get();
 
-        return inertia('Articles/ArticleCreate', compact('categories'));
+        return inertia('Admin/Articles/ArticleCreate', compact('categories'));
     }
 
     /**
@@ -50,11 +53,6 @@ class ArticleController extends Controller
         ]);
 
         $article = $request->all();
-
-        if($request->hasFile('image')) {
-            $request['image'] = $request->file('image')->store('articles', 'public');
-        }
-
         
         Article::create($article);
 

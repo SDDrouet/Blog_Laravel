@@ -15,6 +15,10 @@ class Article extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'body' => 'array', // o 'json'
+    ];
+
     // Relacion inverse one to many article->user
     public function user()
     {
@@ -30,7 +34,7 @@ class Article extends Model
     // Relacion many to many article->categories
     public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
     // Utilizar el slug en lugar del id en las rutas

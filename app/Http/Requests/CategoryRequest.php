@@ -23,12 +23,11 @@ class CategoryRequest extends FormRequest
     {
         //slug and image
         $slug = request()->isMethod('put') ? 'required|unique:categories,slug,' . $this->id : 'required|unique:categories';
-        $image = request()->isMethod('put') ? 'nullable|image' : 'required|image';
 
         return [
             'name' => 'required|max:40',
             'slug' => $slug,
-            'image' => $image,
+            'image' => 'string|nullable|max:255',
             'is_featured' => 'required|boolean',
             'status' => 'required|boolean',
         ];

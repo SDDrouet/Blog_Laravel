@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug', 255)->unique();
             $table->string('introduction', 255);
             $table->string('image', 255);
-            $table->text('body');
+            $table->json('body');
             $table->boolean('status')->default(0);
 
             //Relacion con usuario

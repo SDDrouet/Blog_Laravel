@@ -24,7 +24,7 @@ class CommentController extends Controller
             ->orderBy('comments.id', 'desc')
             ->get();
 
-        return inertia('Comments/Index', compact('comments'));
+        return inertia('Admin/Comments/CommentIndex', compact('comments'));
     }
 
     /**

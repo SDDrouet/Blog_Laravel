@@ -22,15 +22,13 @@ class ArticleRequest extends FormRequest
     public function rules(): array
     {
         $slug = request()->isMethod('put') ? 'required|unique:articles,slug,' . $this->id : 'required|unique:articles';
-        $image = request()->isMethod('put') ? 'nullable|mimes:jpeg,png,jpg,gif,svg|max:8000' : 'required|image';
-
 
         return [
             'title' => 'required|min:5|max:255',
             'slug' => $slug,
             'introduction' => 'required|min:10|max:255',
             'body' => 'required',
-            'image' => $image,
+            'image' => 'string|nullable|max:255',
             'status' => 'required|boolean',
             'category_id' => 'required|integer',
         ];

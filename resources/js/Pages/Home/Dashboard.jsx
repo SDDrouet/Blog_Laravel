@@ -4,6 +4,8 @@ import Articles from './Partials/Articles';
 import Categories from './Partials/Categories';
 
 export default function Dashboard({ articles, navbar, categories}) {
+    console.log('Dashboard articles:', articles);
+    console.log('Dashboard navbar:', navbar);
     return (
         <AuthenticatedLayout
             header={
@@ -26,7 +28,7 @@ export default function Dashboard({ articles, navbar, categories}) {
                                     Todos
                                 </Link>
                             </li>
-                            {navbar.data.map((item) => (
+                            {navbar.map((item) => (
                                 <li key={item.id}>
                                     <Link
                                     href={route('categories.detail', { category: item.slug })}
@@ -55,8 +57,8 @@ export default function Dashboard({ articles, navbar, categories}) {
                     ) : (
                         /* Vista de Artículos */
                         <Articles articles={articles} />
-                    )}
-                </div>
+                    )}                    
+                </div>                
             </div>
         </AuthenticatedLayout>
     );
