@@ -4,8 +4,7 @@ import { Link, router } from '@inertiajs/react'
 import toast from 'react-hot-toast';
 
 export default function ArticleIndex({ articles }) {
-    console.log(articles);
-    
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('es-ES', {
             year: 'numeric',

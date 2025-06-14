@@ -35,38 +35,12 @@ export default function AdminLayout({ header, children }) {
             icon: 'comment',
             current: route().current('admin.comments.*')
         },
-        /*
-        {
-            name: 'Categorías',
-            href: route('admin.categories.index'),
-            icon: 'category',
-            current: route().current('admin.categories.*')
-        },
-        {
-            name: 'Etiquetas',
-            href: route('admin.tags.index'),
-            icon: 'local_offer',
-            current: route().current('admin.tags.*')
-        },
-        {
-            name: 'Comentarios',
-            href: route('admin.comments.index'),
-            icon: 'comment',
-            current: route().current('admin.comments.*')
-        },
         {
             name: 'Usuarios',
             href: route('admin.users.index'),
             icon: 'people',
             current: route().current('admin.users.*')
         },
-        {
-            name: 'Configuración',
-            href: route('admin.settings'),
-            icon: 'settings',
-            current: route().current('admin.settings')
-        }
-        */
     ];
 
     return (

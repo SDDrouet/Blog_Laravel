@@ -25,6 +25,8 @@ class UserController extends Controller
     {
         $roles = Role::all();
 
+        $user->load('roles');
+
         return inertia('Admin/Users/UserCreate', compact('user', 'roles'));
     }
 
@@ -34,7 +36,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //Llenamos la tabla intermedia de roles
-        $user->roles()->sync($request->roles);
+        $user->syncRoles($request->input('role', []));
 
         return redirect()->route('admin.users.edit', $user)
             ->with('success', 'Rol asignado correctamente.');
