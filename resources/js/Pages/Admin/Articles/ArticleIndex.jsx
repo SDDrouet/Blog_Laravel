@@ -96,7 +96,7 @@ export default function ArticleIndex({ articles }) {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                                                {article.categories.name || 'Sin categoría'}
+                                                {article.categories ? article.categories.name : 'Sin categoría'}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">

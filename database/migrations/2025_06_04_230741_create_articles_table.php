@@ -28,11 +28,11 @@ return new class extends Migration
                 ->onDelete('set null');
 
             //Relacion con categoria
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('category_id')
                 ->references('id')
                 ->on('categories')
-                ->onDelete('cascade');
+                ->onDelete('set null');
 
             $table->timestamps();
         });

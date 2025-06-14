@@ -22,7 +22,9 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         //slug and image
-        $slug = request()->isMethod('put') ? 'required|unique:categories,slug,' . $this->id : 'required|unique:categories';
+        $slug = request()->isMethod('put')
+            ? 'required|unique:categories,slug,' . $this->route('category')->id
+            : 'required|unique:categories,slug';
 
         return [
             'name' => 'required|max:40',

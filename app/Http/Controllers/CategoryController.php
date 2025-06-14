@@ -19,7 +19,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::orderBy('id', 'desc')
-            ->simplePaginate(8);
+            ->paginate(8);
 
         return inertia('Admin/Categories/CategoryIndex', compact('categories'));
     }
@@ -29,7 +29,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return inertia('Categories/CategoryCreate');
+        return inertia('Admin/Categories/CategoryCreate');
     }
 
     /**
@@ -38,11 +38,6 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         $category = $request->all();
-
-        // Si el archivo tiene una imagen, guardarla
-        if ($request->hasFile('image')) {
-            $category['image'] = $request->file('image')->store('categories');
-        }
 
         Category::create($category);
 
@@ -55,7 +50,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return inertia('Categories/CategoryEdit', compact('category'));
+        return inertia('Admin/Categories/CategoryCreate', compact('category'));
     }
 
     /**
@@ -63,12 +58,6 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        if($request->hasFile('image')) {
-            File::delete(public_path('storage/' . $category->image));
-            // Guardar la nueva imagen
-            $category->image = $request->file('image')->store('categories');
-        }
-
         // Actualizar los demás campos
         $category->update([
             'name' => $request->name,
@@ -87,10 +76,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if ($category->image) {
-            File::delete(public_path('storage/' . $category->image));
-        }
-
         $category->delete();
     }
 
