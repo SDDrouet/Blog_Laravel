@@ -19,14 +19,14 @@ class UserSeeder extends Seeder
             'email' => 'admin@example.com',
             'email_verified_at' => now(),
             'password' => Hash::make('1234'),
-        ]);
+        ])->assignRole('Administrator');
 
         User::create([
             'full_name' => 'Stephen David Drouet Navarrete',
             'email' => 'david@example.com',
             'email_verified_at' => now(),
             'password' => Hash::make('1234'),
-        ]);
+        ])->assignRole('Author');
 
         // Create 10 users
         // Crear 10 usuarios y actualizar su perfil con o sin foto
