@@ -46,6 +46,13 @@ export default function AdminLayout({ header, children }) {
             current: route().current('admin.users.*'),
             disabled: !permissions.includes('admin.users.index'),
         },
+        {
+            name: 'Roles',
+            href: route('admin.roles.index'),
+            icon: 'key',
+            current: route().current('admin.roles.*'),
+            disabled: !permissions.includes('admin.roles.index'),
+        }
     ];
 
     return (

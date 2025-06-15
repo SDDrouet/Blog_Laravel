@@ -61,6 +61,7 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $permissions = Permission::all();
+        $role->load('permissions'); // Load permissions for the role
 
         return inertia('Admin/Roles/RolesCreate', compact('role', 'permissions'));
     }

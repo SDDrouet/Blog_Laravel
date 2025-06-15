@@ -66,6 +66,11 @@ class ArticlePolicy
 
     public function published(?User $user, Article $article): bool
     {
-        return $article->status === 1;
+        // If the user is not authenticated, we assume they can only view published articles
+        if (!$user) {
+            return $article->status === 1;
+        }
+        
+        return $user->id === $article->user_id;
     }
 }
