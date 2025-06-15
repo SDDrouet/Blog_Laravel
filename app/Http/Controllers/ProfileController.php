@@ -16,6 +16,12 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+    // Constructor para aplicar el middleware de autorización
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display the user's profile form.
      */

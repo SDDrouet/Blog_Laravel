@@ -7,12 +7,22 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArticleController extends Controller
 {
     use AuthorizesRequests;
+
+    //Contructor para aplicar el middleware de autorización
+    public function __construct()
+    {
+        $this->middleware('can:admin.articles.index')->only('index');
+        $this->middleware('can:admin.articles.create')->only(['create', 'store']);
+        $this->middleware('can:admin.articles.edit')->only(['edit', 'update']);
+        $this->middleware('can:admin.articles.destroy')->only('destroy');
+    }
+
+
     /**
      * Display a listing of the resource.
      */

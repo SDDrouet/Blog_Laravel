@@ -8,6 +8,15 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+
+    // Constructor para aplicar el middleware de autorización
+    public function __construct()
+    {
+        $this->middleware('can:admin.users.index')->only('index');
+        $this->middleware('can:admin.users.edit')->only(['edit', 'update']);
+        $this->middleware('can:admin.users.destroy')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      */

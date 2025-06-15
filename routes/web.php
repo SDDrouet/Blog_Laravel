@@ -42,7 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('frase');
 
 
-    Route::get('/admin', action: [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin', action: [AdminController::class, 'index'])
+            ->middleware('can:admin.index') // Middleware to check if the user can access the admin index
+            ->name('admin.index');
 });
 
 // Authentication routes

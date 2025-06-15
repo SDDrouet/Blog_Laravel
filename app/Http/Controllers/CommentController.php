@@ -14,6 +14,13 @@ class CommentController extends Controller
 {
     use AuthorizesRequests;
 
+    // Constructor para aplicar el middleware de autorización
+    public function __construct()
+    {
+        $this->middleware('can:admin.comments.index')->only('index');
+        $this->middleware('can:admin.comments.destroy')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,14 +35,6 @@ class CommentController extends Controller
             ->get();        
 
         return inertia('Admin/Comments/CommentIndex', compact('comments'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -72,31 +71,6 @@ class CommentController extends Controller
             'success' => false,
             'message' => 'Ya has comentado en este artículo o el artículo no está disponible',
         ], 422);
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Comment $comment)
-    {
-        //
     }
 
     /**

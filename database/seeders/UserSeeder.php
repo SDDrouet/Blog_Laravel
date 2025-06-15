@@ -32,7 +32,8 @@ class UserSeeder extends Seeder
         // Crear 10 usuarios y actualizar su perfil con o sin foto
         User::factory(10)->create()->each(function ($user) {
             $hasPhoto = fake()->boolean(80); // 80% probabilidad de tener foto
-
+            $user->password = Hash::make('1234'); // Set a default password
+            $user->save();
             $user->profile->update([
                 'photo' => $hasPhoto
                     ? 'https://randomuser.me/api/portraits/' .
