@@ -7,7 +7,8 @@ import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 export default function AuthenticatedLayout({ header, children }) {
-    const user = usePage().props.auth.user;
+    const { user, permissions } = usePage().props.auth;
+
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -113,11 +114,13 @@ export default function AuthenticatedLayout({ header, children }) {
                                             >
                                                 Perfil
                                             </Dropdown.Link>
+                                            {permissions.includes('admin.index') && (
                                             <Dropdown.Link
                                                 href={route('admin.index')}
                                             >
                                                 Panel de Control
                                             </Dropdown.Link>
+                                            )}
                                             <Dropdown.Link
                                                 href={route('logout')}
                                                 method="post"

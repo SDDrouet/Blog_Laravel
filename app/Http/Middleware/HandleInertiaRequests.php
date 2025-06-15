@@ -29,18 +29,22 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // Cargar el usuario autenticado y su perfil solo con su foto
-
-
         $user = null;
+        $permissions = [];
+        $roles = [];
+
         if ($request->user()) {
-            $user = $request->user()->load('profile:id,user_id,photo');
+            $user = $request->user()->load(['profile:id,user_id,photo']);
+            $permissions = $request->user()->getAllPermissions()->pluck('name');
+            $roles = $request->user()->getRoleNames();
         }
 
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $user,
+                'permissions' => $permissions,
+                'roles' => $roles,
             ],
         ];
     }

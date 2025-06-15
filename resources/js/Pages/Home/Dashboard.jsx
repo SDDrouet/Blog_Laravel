@@ -4,8 +4,6 @@ import Articles from './Partials/Articles';
 import Categories from './Partials/Categories';
 
 export default function Dashboard({ articles, navbar, categories}) {
-    console.log('Dashboard articles:', articles);
-    console.log('Dashboard navbar:', navbar);
     return (
         <AuthenticatedLayout
             header={

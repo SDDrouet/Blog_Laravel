@@ -3,8 +3,8 @@ import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-export default function AdminLayout({ header, children }) {
-    const user = usePage().props.auth.user;
+export default function AdminLayout({ header, children }) {    
+    const { user, permissions } = usePage().props.auth;
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [open, setOpen] = useState(false);
@@ -15,31 +15,36 @@ export default function AdminLayout({ header, children }) {
             name: 'Dashboard',
             href: route('admin.index'),
             icon: 'dashboard',
-            current: route().current('admin.index')
+            current: route().current('admin.index'),
+            disabled: !permissions.includes('admin.index'),
         },
         {
             name: 'Artículos',
             href: route('admin.articles.index'),
             icon: 'article',
-            current: route().current('admin.articles.*')
+            current: route().current('admin.articles.*'),
+            disabled: !permissions.includes('admin.articles.index'),
         },
         {
             name: 'Categorías',
             href: route('admin.categories.index'),
             icon: 'category',
-            current: route().current('admin.categories.*')
+            current: route().current('admin.categories.*'),
+            disabled: !permissions.includes('admin.categories.index'),
         },
         {
             name: 'Comentarios',
             href: route('admin.comments.index'),
             icon: 'comment',
-            current: route().current('admin.comments.*')
+            current: route().current('admin.comments.*'),
+            disabled: !permissions.includes('admin.comments.index'),
         },
         {
             name: 'Usuarios',
             href: route('admin.users.index'),
             icon: 'people',
-            current: route().current('admin.users.*')
+            current: route().current('admin.users.*'),
+            disabled: !permissions.includes('admin.users.index'),
         },
     ];
 
@@ -112,23 +117,25 @@ export default function AdminLayout({ header, children }) {
                 {/* Navegación */}
                 <nav className="mt-6 px-3">
                     <div className="space-y-1">
-                        {adminMenuItems.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                title={item.name}
-                                className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                                    item.current
-                                    ? 'bg-rose-100 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400'
-                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                                }`}
-                                >
-                                <span className={`material-symbols-rounded ${sidebarCollapsed ? 'mx-auto' : 'mr-3'} text-lg transition-all`}>
-                                    {item.icon}
-                                </span>
-                                {!sidebarCollapsed && <span className="truncate">{item.name}</span>}
-                            </Link>
-                        ))}
+                        {adminMenuItems.map((item) => {
+                            if (!item.disabled) {
+                                return (<Link
+                                    key={item.name}
+                                    href={item.href}
+                                    title={item.name}                                
+                                    className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                                        item.current
+                                        ? 'bg-rose-100 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400'
+                                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                                    }`}
+                                    >
+                                    <span className={`material-symbols-rounded ${sidebarCollapsed ? 'mx-auto' : 'mr-3'} text-lg transition-all`}>
+                                        {item.icon}
+                                    </span>
+                                    {!sidebarCollapsed && <span className="truncate">{item.name}</span>}
+                                </Link>);
+                            }
+                        })}
                     </div>
                 </nav>
 

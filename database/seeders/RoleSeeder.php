@@ -27,48 +27,48 @@ class RoleSeeder extends Seeder
 
         // Permisos para categorias
         Permission::create([
-            'name' => 'categories.index',
+            'name' => 'admin.categories.index',
             'description' => 'Ver categorias',
         ])->syncRoles([$admin, $author]);
         Permission::create([
-            'name' => 'categories.create',
+            'name' => 'admin.categories.create',
             'description' => 'Crear categorias',
         ])->syncRoles([$admin]);
         Permission::create([
-            'name' => 'categories.edit',
+            'name' => 'admin.categories.edit',
             'description' => 'Editar categorias',
         ])->syncRoles([$admin]);
         Permission::create([
-            'name' => 'categories.destroy',
+            'name' => 'admin.categories.destroy',
             'description' => 'Eliminar categorias',
         ])->syncRoles([$admin]);
 
 
         // Articles permissions
         Permission::create([
-            'name' => 'articles.index',
+            'name' => 'admin.articles.index',
             'description' => 'Ver articulos',
         ])->syncRoles([$admin, $author]);
         Permission::create([
-            'name' => 'articles.create',
+            'name' => 'admin.articles.create',
             'description' => 'Crear articulos',
         ])->syncRoles([$admin, $author]);
         Permission::create([
-            'name' => 'articles.edit',
+            'name' => 'admin.articles.edit',
             'description' => 'Editar articulos',
         ])->syncRoles([$admin, $author]);
         Permission::create([
-            'name' => 'articles.destroy',
+            'name' => 'admin.articles.destroy',
             'description' => 'Eliminar articulos',
         ])->syncRoles([$admin, $author]);
 
         // Comments permissions
         Permission::create([
-            'name' => 'comments.index',
+            'name' => 'admin.comments.index',
             'description' => 'Ver comentarios',
         ])->syncRoles([$admin, $author]);
         Permission::create([
-            'name' => 'comments.destroy',
+            'name' => 'admin.comments.destroy',
             'description' => 'Eliminar comentarios',
         ])->syncRoles([$admin, $author]);
 
@@ -76,15 +76,15 @@ class RoleSeeder extends Seeder
 
         // Users permissions
         Permission::create([
-            'name' => 'users.index',
+            'name' => 'admin.users.index',
             'description' => 'Ver usuarios',
         ])->syncRoles([$admin]);
         Permission::create([
-            'name' => 'users.edit',
+            'name' => 'admin.users.edit',
             'description' => 'Editar usuarios',
         ])->syncRoles([$admin]);
         Permission::create([
-            'name' => 'users.destroy',
+            'name' => 'admin.users.destroy',
             'description' => 'Eliminar usuarios',
         ])->syncRoles([$admin]);
 

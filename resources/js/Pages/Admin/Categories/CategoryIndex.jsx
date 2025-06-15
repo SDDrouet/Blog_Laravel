@@ -1,9 +1,10 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import React from 'react';
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 
 export default function CategoryIndex({ categories }) {
+    const { user, permissions } = usePage().props.auth;
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('es-ES', {
@@ -45,14 +46,16 @@ export default function CategoryIndex({ categories }) {
                             Administra las categorías del blog
                         </p>
                     </div>
-                    <Link
-                        href={route('admin.categories.create')}
-                        title='Crear nueva categoría'
-                        className="inline-flex items-center px-4 py-2 bg-rose-500 text-white rounded-md text-xs font-semibold uppercase tracking-widest hover:bg-rose-600 focus:bg-rose-600 transition"
-                    >
-                        <span className="material-symbols-rounded text-sm mr-2">add</span>
-                        Nueva
-                    </Link>
+                    {permissions.includes('admin.categories.create') && (
+                        <Link
+                            href={route('admin.categories.create')}
+                            title='Crear nueva categoría'
+                            className="inline-flex items-center px-4 py-2 bg-rose-500 text-white rounded-md text-xs font-semibold uppercase tracking-widest hover:bg-rose-600 focus:bg-rose-600 transition"
+                        >
+                            <span className="material-symbols-rounded text-sm mr-2">add</span>
+                            Nueva
+                        </Link>
+                    )}
                 </div>
 
                 {/* Tabla de categorías */}
@@ -79,27 +82,31 @@ export default function CategoryIndex({ categories }) {
                                     <td className="px-6 py-4 text-center">
                                         <div className="flex justify-center space-x-2">
                                             {/* Editar */}
-                                            <Link
-                                                href={route('admin.categories.edit', category.slug)}
-                                                title="Editar categoría"
-                                                className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-md flex items-center justify-center"
-                                            >
-                                                <span className="material-symbols-rounded text-lg">edit</span>
-                                            </Link>
+                                            {permissions.includes('admin.categories.edit') && (
+                                                <Link
+                                                    href={route('admin.categories.edit', category.slug)}
+                                                    title="Editar categoría"
+                                                    className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-md flex items-center justify-center"
+                                                >
+                                                    <span className="material-symbols-rounded text-lg">edit</span>
+                                                </Link>
+                                            )}
                                             {/* Eliminar */}
-                                            <button
-                                                onClick={() => {
-                                                    router.delete(route('admin.categories.destroy', category.slug), {
-                                                        onBefore: () => confirm('¿Estás seguro de eliminar esta categoría?'),
-                                                        onSuccess: () => toast.success('Categoría eliminada correctamente'),
-                                                        onError: () => toast.error('Error al eliminar la categoría')
-                                                    });
-                                                }}
-                                                title="Eliminar categoría"
-                                                className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-md flex items-center justify-center"
-                                            >
-                                                <span className="material-symbols-rounded text-lg">delete</span>
-                                            </button>
+                                            {permissions.includes('admin.categories.destroy') && (
+                                                <button
+                                                    onClick={() => {
+                                                        router.delete(route('admin.categories.destroy', category.slug), {
+                                                            onBefore: () => confirm('¿Estás seguro de eliminar esta categoría?'),
+                                                            onSuccess: () => toast.success('Categoría eliminada correctamente'),
+                                                            onError: () => toast.error('Error al eliminar la categoría')
+                                                        });
+                                                    }}
+                                                    title="Eliminar categoría"
+                                                    className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-md flex items-center justify-center"
+                                                >
+                                                    <span className="material-symbols-rounded text-lg">delete</span>
+                                                </button>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>
