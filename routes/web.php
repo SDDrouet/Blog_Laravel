@@ -1,12 +1,5 @@
 <?php
-
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,9 +24,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->names('admin.comments');
 
     // Usuarios
-    Route::resource('admin/users', \App\Http\Controllers\UserController::class)
+    Route::resource('admin/users', UserController::class)
         ->except(['show', 'create', 'store']) // Exclude show, create, and store methods
         ->names('admin.users');
+
+    // Roles
+    Route::resource('admin/roles', RoleController::class)
+        ->except(['show']) // Exclude show
+        ->names('admin.roles');
 
     Route::post('/comment', action: [CommentController::class, 'store'])->name('comments.store');
 
@@ -45,14 +43,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin', action: [AdminController::class, 'index'])
             ->middleware('can:admin.index') // Middleware to check if the user can access the admin index
             ->name('admin.index');
-});
-
-// Authentication routes
-Route::middleware('auth')->group(function () {
+    
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 // Rutas publicas
 Route::get('/category/{category}', [CategoryController::class, 'detail'])->name('categories.detail');
@@ -61,22 +58,5 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');    //
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 
-
-
+// Auth routes
 require __DIR__.'/auth.php';
-
-
-// Rutas de forma larga
-/*
-Route::middleware(['auth', 'verified'])->group(function () {
-    
-    // Forma larga para crear un artículo
-    Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-    Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-    Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-    Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
-    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-    
-});
-*/

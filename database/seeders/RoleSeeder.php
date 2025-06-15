@@ -88,5 +88,24 @@ class RoleSeeder extends Seeder
             'description' => 'Eliminar usuarios',
         ])->syncRoles([$admin]);
 
+
+        // Roles permissions
+        Permission::create([
+            'name' => 'admin.roles.index',
+            'description' => 'Ver roles',
+        ])->syncRoles([$admin]);
+        Permission::create([
+            'name' => 'admin.roles.create',
+            'description' => 'Crear roles',
+        ])->syncRoles([$admin]);
+        Permission::create([
+            'name' => 'admin.roles.edit',
+            'description' => 'Editar roles',
+        ])->syncRoles([$admin]);
+        Permission::create([
+            'name' => 'admin.roles.destroy',
+            'description' => 'Eliminar roles',
+        ])->syncRoles([$admin]);
+
     }
 }
