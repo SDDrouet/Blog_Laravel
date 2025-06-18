@@ -84,7 +84,9 @@ export default function RolesIndex({ roles }) {
                         <button
                           onClick={() => {
                             if (confirm('¿Estás seguro de eliminar este rol?')) {
-                              router.delete(route('admin.roles.destroy', role.id), {
+                              router.post(route('admin.roles.destroy', role.id), {
+                                _method: 'DELETE',
+                              }, {
                                 onSuccess: () => toast.success('Rol eliminado correctamente'),
                                 onError: () => toast.error('Error al eliminar el rol')
                               });
@@ -103,7 +105,7 @@ export default function RolesIndex({ roles }) {
                 <tr>
                   <td colSpan="4" className="px-6 py-12 text-center">
                     <div className="flex flex-col items-center justify-center">
-                      <span className="material-icons text-6xl text-gray-300 dark:text-gray-600 mb-4">
+                      <span className="material-symbols-rounded text-6xl text-gray-300 dark:text-gray-600 mb-4">
                         shield_person
                       </span>
                       <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
@@ -116,7 +118,7 @@ export default function RolesIndex({ roles }) {
                         href={route('admin.roles.create')}
                         className="inline-flex items-center px-4 py-2 bg-rose-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-600 focus:bg-rose-600 active:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
                       >
-                        <span className="material-icons text-sm mr-2">add</span>
+                        <span className="material-symbols-rounded text-sm mr-2">add</span>
                         Crear Rol
                       </Link>
                     </div>

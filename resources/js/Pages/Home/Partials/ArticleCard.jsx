@@ -8,7 +8,7 @@ const ArticleCard = ({ article }) => {
   return (
     <article className="group bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md hover:border-gray-200 dark:hover:border-gray-700 transition-all duration-300 overflow-hidden">
       <Link
-        href={`/articles/${slug}`}
+        href={route('articles.show', { article: slug })}
         className="block h-full text-gray-900 dark:text-gray-100 no-underline"
       >
         {/* Imagen del artículo */}

@@ -17,7 +17,10 @@ export default function UserCreate({ user, roles }) {
         e.preventDefault();
         clearErrors();
 
-        router.put(route('admin.users.update', user.id), data, {
+        router.post(route('admin.users.update', user.id), {
+            ...data,
+            _method: 'PUT',
+        }, {
             onSuccess: () => toast.success('Usuario actualizado correctamente'),
             onError: (errors) => {
                 toast.error('Error al actualizar el usuario');

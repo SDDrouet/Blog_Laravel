@@ -35,7 +35,11 @@ export default function ArticleCreate({ categories, article }) {
 
         if (article) {
             // Si estamos editando un artículo existente, usamos el método PUT
-            router.put(route('admin.articles.update', article), data, {
+            router.post(route('admin.articles.update', article), {
+                ...data,
+                _method: 'put', // Aseguramos que se use el método PUT
+
+            }, {
                 onSuccess: () => toast.success('Artículo actualizado exitosamente'),
                 onError: (errors) => {
                     toast.error('Hubo un problema al actualizar el artículo');

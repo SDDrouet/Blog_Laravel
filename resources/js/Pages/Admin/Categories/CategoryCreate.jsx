@@ -30,7 +30,10 @@ export default function CategoryCreate({ category }) {
         clearErrors();
 
         if (category) {
-            router.put(route('admin.categories.update', category.slug), data, {
+            router.post(route('admin.categories.update', category.slug), {
+                ...data,
+                _method: 'PUT',
+            }, {
                 onSuccess: () => toast.success('Categoría actualizada correctamente'),
                 onError: (errors) => {
                     toast.error('Error al actualizar la categoría');

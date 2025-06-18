@@ -6,7 +6,9 @@ import toast from 'react-hot-toast';
 export default function CommentIndex({ comments }) {
     const handleDelete = (comment) => {
         if (confirm('¿Estás seguro de que deseas eliminar este comentario?')) {
-            router.delete(route('admin.comments.destroy', comment), {
+            router.post(route('admin.comments.destroy', comment), {
+                _method: 'DELETE',
+            }, {
                 onSuccess: () => toast.success('Comentario eliminado correctamente'),
                 onError: () => toast.error('Error al eliminar el comentario'),
             });

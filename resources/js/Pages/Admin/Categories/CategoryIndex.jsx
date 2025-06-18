@@ -95,7 +95,9 @@ export default function CategoryIndex({ categories }) {
                                             {permissions.includes('admin.categories.destroy') && (
                                                 <button
                                                     onClick={() => {
-                                                        router.delete(route('admin.categories.destroy', category.slug), {
+                                                        router.post(route('admin.categories.destroy', category.slug), {
+                                                            _method: 'DELETE',
+                                                        } ,{
                                                             onBefore: () => confirm('¿Estás seguro de eliminar esta categoría?'),
                                                             onSuccess: () => toast.success('Categoría eliminada correctamente'),
                                                             onError: () => toast.error('Error al eliminar la categoría')

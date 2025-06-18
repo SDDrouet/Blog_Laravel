@@ -98,7 +98,7 @@ export default function AdminLayout({ header, children }) {
                 {/* Logo */}
                 <div className="flex items-center justify-end h-16 px-3 border-b border-gray-200 dark:border-gray-700">
                     {!sidebarCollapsed && (
-                    <Link href="/" className="flex items-center">
+                    <Link href={route('dashboard')} className="flex items-center">
                         <ApplicationLogo className="block h-8 w-auto fill-current rounded-md" />
                     </Link>)}                    
 

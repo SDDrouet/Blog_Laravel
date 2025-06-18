@@ -68,7 +68,9 @@ export default function UserIndex({ users }) {
                                                 <button
                                                     onClick={() => {
                                                         if (confirm('¿Estás seguro de eliminar este usuario?')) {
-                                                            router.delete(route('admin.users.destroy', user.id), {
+                                                            router.post(route('admin.users.destroy', user.id), {
+                                                                _method: 'DELETE',
+                                                            }, {
                                                                 onSuccess: () => {
                                                                     toast.success('Usuario eliminado correctamente')
                                                                 },

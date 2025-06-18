@@ -1,0 +1,5 @@
+import{r as u,j as t}from"./app-CjaGCVDx.js";const m=({value:r,onChange:o,error:a})=>{const[c,l]=u.useState(0),n="★",x="☆",d=e=>{o(e)},i=e=>{l(e)},p=()=>{l(0)},s=c||r;return t.jsxs("div",{className:"space-y-2",children:[t.jsx("div",{className:"flex gap-0",children:[1,2,3,4,5].map(e=>t.jsx("button",{type:"button",onClick:()=>d(e),onMouseEnter:()=>i(e),onMouseLeave:p,className:`
+              text-2xl duration-100 transform hover:scale-125
+              ${e<=s?"text-rose-500 drop-shadow-sm":"text-gray-300 dark:text-gray-600"}
+              hover:text-rose-400 cursor-pointer select-none
+            `,style:{textShadow:e<=s?"0 0 3px rgba(244, 63, 94, 0.3)":"none"},"aria-label":`Calificar con ${e} estrella${e!==1?"s":""}`,children:e<=s?n:x},e))}),t.jsxs("div",{className:"text-sm text-gray-500 dark:text-gray-400",children:[s>0&&t.jsxs("span",{children:[s," estrella",s!==1?"s":""]}),s===0&&t.jsx("span",{children:"Haz clic en una estrella para calificar"})]}),a&&t.jsx("p",{className:"text-red-500 text-sm",children:a})]})};export{m as default};

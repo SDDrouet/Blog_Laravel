@@ -28,7 +28,10 @@ export default function RolesCreate({ role, permissions }) {
 
         if (role) {
             // Si estamos editando un rol existente, usamos el método PUT
-            router.put(route('admin.roles.update', role.id), data, {
+            router.post(route('admin.roles.update', role.id), {
+                ...data,
+                _method: 'PUT',
+            }, {
                 onSuccess: () => toast.success('Rol actualizado exitosamente'),
                 onError: (errors) => {
                     toast.error('Hubo un problema al actualizar el rol');
