@@ -1,0 +1,57 @@
+name: CI/CD - StartBlog Deploy
+
+on:
+  push:
+    branches:
+      - main  # Solo se ejecuta cuando haces push a la rama main
+  workflow_dispatch:  # Permite ejecutarlo manualmente desde GitHub
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Clonar repositorio
+        uses: actions/checkout@v3
+
+      - name: 🧰 Instalar PHP y dependencias
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: mbstring, xml, curl, mysql, gd
+          tools: composer
+
+      - name: 📥 Instalar dependencias PHP
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: 🧪 Ejecutar pruebas de Laravel
+        run: php artisan test
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Instalar dependencias frontend
+        run: npm install
+
+      - name: 🛠️ Compilar assets (React)
+        run: npm run build
+
+      - name: 🚀 Desplegar por FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./  # Directorio local que se va a subir
+          server-dir: /public_html/  # Ruta en el servidor remoto
+          exclude: |
+            **/.git*
+            **/node_modules/**
+            **/tests/**
+            .env
+            .github/**
+            storage/logs/**
+            vendor/**
+
